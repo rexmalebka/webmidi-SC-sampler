@@ -76,8 +76,7 @@ import Settings from './components/Settings.vue'
 import SCScript from './SCgen'
 import {Config,sample} from './Config'
 
-import WebMidi from "webmidi";
-import {InputEventSysex, Input, Output} from "webmidi";
+import {WebMidi} from "webmidi/dist/webmidi.esm.js";
 
 
 interface sequence{
@@ -102,11 +101,11 @@ export default class app extends Vue{
 	config:Config = Config 
 	sequences:sequence[] = []
 
-	output :Output | any= {
+	output : any= {
 		id: '',
 		state: 'disconnected'
 		}
-	input : Input | any = {
+	input :  any = {
 			id: '',
 		state: 'disconnected',
 		}
@@ -160,7 +159,7 @@ export default class app extends Vue{
 	}
 
 	listener(app:any){
-		return function(e:InputEventSysex){
+		return function(e:any){
 			const data = e.data
 			if(data[1] == app.config.sc_sysex_id){
 				const fun_id = Object.keys(app.config.sysex_msgs).map(x=> app.config.sysex_msgs[x].id).indexOf(data[2])
@@ -437,14 +436,17 @@ export default class app extends Vue{
 
 	created(){
 		const app = this
-		WebMidi.enable(function(err){
-			if(err){
-				console.info('midi request failed', err)
-			}else{
-				app.midi = WebMidi
-				console.info("midi request succeded")
-			}
-		}, true)
+		WebMidi.enable({
+			callback: function(err:any):void{
+				if(err){
+					console.info('midi request failed', err)
+				}else{
+					app.midi = WebMidi
+					console.info("midi request succeded")
+				}
+			},
+			sysex: true
+		})
 	}
 }
 </script>

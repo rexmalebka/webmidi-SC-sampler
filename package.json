@@ -34,6 +34,6 @@
     "bootstrap": "^5.1.0",
     "codemirror": "^5.62.3",
     "vue-class-component": "^7.2.6",
-    "webmidi": "^2.5.3"
+    "webmidi": "^3.0.0-alpha.20"
   }
 }
